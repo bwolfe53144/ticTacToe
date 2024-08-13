@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div class="message"></div>
+    <div class="topContainer">
+        <div class="nameSelect">
+            <button type="button" onclick="openFormOne()">Player 1 Name</button>
+            <form id="myFormOne">
+                <input type="text" name="name" id="name" placeholder="Name..." required maxlength="20">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="closeFormOne()">Hide</button>
+            </form>
+        </div>
+        <div class="nameSelect">
+            <button type="button" onclick="openFormTwo()">Player 2 Name</button>
+            <form id="myFormTwo">
+                <input type="text" name="name" id="name" placeholder="Name..." required maxlength="20">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="closeFormTwo()">Hide</button>
+            </form>
+        </div>
+    </div>
+    <div class="bottomContainer">
+        <div class="playerOneScore scoreBoard">
+            <div class="scoreBoardName"><span id="oneName"></span></div>
+            <div class="scoreBoardScore"><span id="oneScore"></span></div>
+        </div>
+        <div class="gameboard">
+            <div class="colOne">
+                <div id="1" class="box"></div>
+                <div id="2" class="box"></div>
+                <div id="3" class="box"></div>
+            </div>
+            <div class="colTwo">
+                <div id="4" class="box"></div>
+                <div id="5" class="box"></div>
+                <div id="6" class="box"></div>
+            </div>
+            <div class="colThree">
+                <div id="7" class="box"></div>
+                <div id="8" class="box"></div>
+                <div id="9" class="box"></div>
+            </div>
+        </div>
+        <div class="playerTwoScore scoreBoard">
+            <div class="scoreBoardName"><span id="twoName"></span></div>
+            <div class="scoreBoardScore"><span id="twoScore"></span></div>     
+        </div>
+    </div>        
+    <div class="gameButtons">
+        <button id="reset">Reset Score</button>
+        <button id="clear">Clear Game</button>
+        <button id="startGame">Play Again</button>
+    </div>
+</body>
+</html>
+<script src="script.js"></script>
+</html>
+
