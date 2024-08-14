@@ -36,11 +36,8 @@ function findWinner() {
             wonGame = "tie";
             endGame();
             gameDone();
-        } else {
-            return
-        }
-        
-    }
+        }       
+}
 
 function endGame() {
     oneScore.innerText = playerOneScore;
@@ -95,23 +92,6 @@ function clearScreen() {
     };
     endGame();
 }
-
-const clear = document.querySelector("#clear");
-clear.addEventListener("click", () => {
-    clearScreen();
-});
-
-const reset = document.querySelector("#reset");
-reset.addEventListener("click", () => {
-    resetScore();
-  });
-
-  const startGame = document.querySelector("#startGame");
-  startGame.addEventListener("click", () => {
-    clearScreen();
-    clearArray();
-    playGame();
-    });
 
 function resetScore() {
     playerOneScore = 0;
@@ -187,25 +167,32 @@ function closeFormTwo() {
 document.getElementById("myFormTwo").style.display = "none";
 }
 
-const openOne = document.querySelector("#openOne");
-openOne.addEventListener("click", () => {
-document.getElementById("myFormOne").style.display = "block";  
-});
+var theParent = document.querySelector("body");
+theParent.addEventListener("click", doSomething, false);
 
-const openTwo = document.querySelector("#openTwo");
-openTwo.addEventListener("click", () => {
-document.getElementById("myFormTwo").style.display = "block";  
-});
-
-const closeOne = document.querySelector("#closeOne");
-closeOne.addEventListener("click", () => {
-closeFormOne();  
-});
-
-const closeTwo = document.querySelector("#closeOne");
-closeOne.addEventListener("click", () => {
-closeFormTwo();  
-});
+function doSomething(e) {
+    if (e.target !== e.currentTarget) {
+        var clickedItem = e.target.id;
+        if (clickedItem == "openOne") {
+            document.getElementById("myFormOne").style.display = "block";
+        } else if (clickedItem == "closeOne") {
+            closeFormOne();
+        } else if (clickedItem == "openTwo") {
+            document.getElementById("myFormTwo").style.display = "block";
+        } else if (clickedItem == "closeTwo") {
+            closeFormTwo();
+        } else if (clickedItem == "clear") {
+            clearScreen();
+        } else if (clickedItem == "reset") {
+            resetScore();
+        } else if (clickedItem == "startGame") {
+            clearScreen();
+            clearArray();
+            playGame();
+        }
+    }
+    e.stopPropagation();
+}
 
 closeFormOne();
 closeFormTwo();
