@@ -33,6 +33,7 @@ function findWinner() {
             endGame();
             gameDone();
         } else if ((gameArray.length == 9) && !gameArray.includes(undefined) ) {
+            wonGame = "tie";
             endGame();
             gameDone();
         } else {
@@ -50,9 +51,6 @@ function endGame() {
     myMark = "X";
     message = document.querySelector(".message");
     message.innerText = "";
-
-
-
 }
 
 let gameArray = [];
@@ -89,7 +87,6 @@ function playGame() {
     }
 }
 
-
 /*Function to clear the screen*/
 function clearScreen() {
     boxes = document.querySelectorAll('.box')
@@ -103,7 +100,6 @@ const clear = document.querySelector("#clear");
 clear.addEventListener("click", () => {
     clearScreen();
 });
-
 
 const reset = document.querySelector("#reset");
 reset.addEventListener("click", () => {
@@ -132,17 +128,12 @@ let playerOneName = "Player One";
 let playerTwoName = "Player Two";
 let myTurn = playerOneName;
 
-
-
-
 let myMark = "X";
-
 
 oneName.innerText = playerOneName;
 twoName.innerText = playerTwoName;
 oneScore.innerText = playerOneScore;
 twoScore.innerText = playerTwoScore;
-
 
 function whosTurn() {
     if (turn%2 !== 1) {
@@ -164,12 +155,6 @@ function gameDone() {
         message.innerText = `Congratulations ${wonGame}, you win!!!`
     }
 }
-
-
-
-
-
-
 
 const myFormOne = document.getElementById('myFormOne');                    
 myFormOne.addEventListener('submit', function(event) {
@@ -195,20 +180,32 @@ myformTwo.addEventListener('submit', function(event) {
 });
 
 function closeFormOne() {
-        document.getElementById("myFormOne").style.display = "none";
-}
-
-function openFormTwo() {
-    document.getElementById("myFormTwo").style.display = "block";
+    document.getElementById("myFormOne").style.display = "none";
 }
 
 function closeFormTwo() {
-    document.getElementById("myFormTwo").style.display = "none";
+document.getElementById("myFormTwo").style.display = "none";
 }
 
-function openFormOne() {
-    document.getElementById("myFormOne").style.display = "block";
-}
+const openOne = document.querySelector("#openOne");
+openOne.addEventListener("click", () => {
+document.getElementById("myFormOne").style.display = "block";  
+});
+
+const openTwo = document.querySelector("#openTwo");
+openTwo.addEventListener("click", () => {
+document.getElementById("myFormTwo").style.display = "block";  
+});
+
+const closeOne = document.querySelector("#closeOne");
+closeOne.addEventListener("click", () => {
+closeFormOne();  
+});
+
+const closeTwo = document.querySelector("#closeOne");
+closeOne.addEventListener("click", () => {
+closeFormTwo();  
+});
 
 closeFormOne();
 closeFormTwo();
