@@ -1,10 +1,7 @@
-
-
 let playerOneScore = 0;
 let playerTwoScore = 0;
     
 let turn = 0;
-let wonGame = "";
 
 function findWinner() {
 
@@ -18,7 +15,6 @@ function findWinner() {
         || (gameArray[2] == 1 && gameArray[4] == 1 && gameArray[6] == 1)) {
         playerOneScore= ++playerOneScore;
         wonGame = playerOneName;
-        endGame();
         gameDone();
     } else if ((gameArray[0] == 0 && gameArray[1] == 0 && gameArray[2] == 0) 
         || (gameArray[3] == 0 && gameArray[4] == 0 && gameArray[5] == 0)
@@ -30,11 +26,9 @@ function findWinner() {
         || (gameArray[2] == 0 && gameArray[4] == 0 && gameArray[6] == 0)) {
             playerTwoScore = ++playerTwoScore;
             wonGame = playerTwoName;
-            endGame();
             gameDone();
         } else if ((gameArray.length == 9) && !gameArray.includes(undefined) ) {
             wonGame = "tie";
-            endGame();
             gameDone();
         }       
 }
@@ -42,7 +36,7 @@ function findWinner() {
 function endGame() {
     oneScore.innerText = playerOneScore;
     twoScore.innerText = playerTwoScore;
-    gameArray = [0,0,0,0,0,0,0,0,0];
+    gameOver = "true";
     turn = 0;
     myTurn = playerOneName;
     myMark = "X";
@@ -53,6 +47,9 @@ function endGame() {
 let gameArray = [];
 
 function playGame() {
+    gameArray = [];
+    gameOver = "false";
+    let wonGame = "";
     whosTurn();
     /*set up event listener*/
     let clicked = document.querySelectorAll(".box");
@@ -65,7 +62,7 @@ function playGame() {
     function wasClicked(e) {
         /*see if array number was already selected so we can't choose the same spot*/
         const num = parseInt(e.id);
-        if (gameArray[num-1] !==0 && gameArray[num-1] !==1) {
+        if (gameArray[num-1] !==0 && gameArray[num-1] !==1 && gameOver == "false") {
         if (turn%2 == 0) {
             e.textContent = "X";
             gameArray[num-1] = 1;
@@ -100,10 +97,6 @@ function resetScore() {
     twoScore.innerText = playerTwoScore;
 }
 
-function clearArray() {
-    gameArray = [];
-}
-
 let playerOneName = "Player One";
 let playerTwoName = "Player Two";
 let myTurn = playerOneName;
@@ -129,6 +122,7 @@ function whosTurn() {
 
 function gameDone() {
     message = document.querySelector(".message");
+    endGame();
     if (wonGame == "tie") {
         message.innerText = "It's a tie!"
     } else {
@@ -138,9 +132,7 @@ function gameDone() {
 
 const myFormOne = document.getElementById('myFormOne');                    
 myFormOne.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
-
-    // Access and log the values
+    event.preventDefault(); 
     playerOneName = myFormOne.elements.name.value;
     oneName.innerText = playerOneName;
     closeFormOne();
@@ -150,10 +142,7 @@ myFormOne.addEventListener('submit', function(event) {
 const myformTwo = document.getElementById('myFormTwo');                    
 myformTwo.addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent form submission
-
-    // Access and log the values
-
-    playerTwoName = myformTwo.elements.name.value;
+     playerTwoName = myformTwo.elements.name.value;
     twoName.innerText = playerTwoName;
     closeFormTwo();
     whosTurn();
@@ -187,7 +176,6 @@ function doSomething(e) {
             resetScore();
         } else if (clickedItem == "startGame") {
             clearScreen();
-            clearArray();
             playGame();
         }
     }
