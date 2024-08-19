@@ -30,14 +30,7 @@ let turn = 1
 
 const gameboard = {gameArray: ["0", "0", "0", "0", "0", "0", "0", "0", "0"]}
 
-function boardMoves(box, num){
-    if (gameOver == "false") {
-        box.textContent = `${player.marker}`;
-        gameboard.gameArray[num-1] = `${player.marker}`;
-        turn ++;
-        gameStatus();   
-    }
-}
+
 
 var theParent = document.querySelector("body");
 theParent.addEventListener("click", wasClicked, false);
@@ -60,40 +53,26 @@ function wasClicked(e) {
             scoreBoard.resetScore();
         } else if (clickedItem == "startGame") {
             clearScreen();
-            startGame();
+            playGame.startGame();
         } else if (num > 0 && num < 10 && (gameboard.gameArray[num-1]== "0")) {
-            boardMoves(e.target, num);
+            playGame.boardMoves(e.target, num);
 
         }
     }
     e.stopPropagation();
 }
 
-function gameDone(player) {
-    message = document.querySelector(".message");
-    endGame();
-    if (player == "tie") {
-        message.innerText = "It's a tie!"
-    } else {
-        message.innerText = `Congratulations ${player.name}, you win!!!`
-    }
-}
+
 
 function clearScreen() {
     boxes = document.querySelectorAll('.box')
     for (const box of boxes) {
         box.textContent = "";
     };
-    endGame();
+    playGame.endgame();
 }
 
-function endGame() {
-    scoreBoard.showScore();
-    gameOver = "true";
-    player = playerOne;
-    message = document.querySelector(".message");
-    message.innerText = "";
-}
+
 
 const myFormOne = document.getElementById('myFormOne');                    
 myFormOne.addEventListener('submit', function(event) {
@@ -123,21 +102,27 @@ function programStart() {
     scoreBoard.resetScore();
     closeFormOne();
     closeFormTwo();
-    startGame();
+    playGame.startGame();
 }
 
-function startGame() {
+const playGame = {
+    startGame: function() {
     gameOver = "false";
     turn = 1;
     player = playerOne;
     gameboard.gameArray = ["0", "0", "0", "0", "0", "0", "0", "0", "0"];
     scoreBoard.showScore();
     scoreBoard.showMessage();
-}
-
-programStart();
-
-    function gameStatus() {
+    },
+    boardMoves: function(box,num) {
+        if (gameOver == "false") {
+            box.textContent = `${player.marker}`;
+            gameboard.gameArray[num-1] = `${player.marker}`;
+            turn ++;
+            playGame.gameStatus(); 
+        }
+    },
+    gameStatus: function() {
         if ((gameboard.gameArray[0] == "X" && gameboard.gameArray[1] == "X" && gameboard.gameArray[2] == "X") 
             || (gameboard.gameArray[3] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[5] == "X")
             || (gameboard.gameArray[6] == "X" && gameboard.gameArray[7] == "X" && gameboard.gameArray[8] == "X")
@@ -147,7 +132,7 @@ programStart();
             || (gameboard.gameArray[0] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[8] == "X")
             || (gameboard.gameArray[2] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[6] == "X")) {
             playerOne.score= ++playerOne.score;
-            gameDone(playerOne);
+            playGame.gameDone(playerOne);
         } else if ((gameboard.gameArray[0] == "O" && gameboard.gameArray[1] == "O" && gameboard.gameArray[2] == "O") 
             || (gameboard.gameArray[3] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[5] == "O")
             || (gameboard.gameArray[6] == "O" && gameboard.gameArray[7] == "O" && gameboard.gameArray[8] == "O")
@@ -157,11 +142,30 @@ programStart();
             || (gameboard.gameArray[0] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[8] == "O")
             || (gameboard.gameArray[2] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[6] == "O")) {
                 playerTwo.score = ++playerTwo.score;
-                gameDone(playerTwo);
-            } else if (turn == 10) {
-                gameDone("tie");
-            } else {
-                player = player === playerOne ? playerTwo : playerOne; 
-                scoreBoard.showMessage();
-            }              
+                playGame.gameDone(playerTwo);
+        } else if (turn == 10) {
+            playGame.gameDone("tie");
+        } else {
+            player = player === playerOne ? playerTwo : playerOne; 
+            scoreBoard.showMessage();
+        } 
+    },
+    gameDone: function(player) {
+        message = document.querySelector(".message");
+        playGame.endgame();
+        if (player == "tie") {
+            message.innerText = "It's a tie!"
+        } else {
+            message.innerText = `Congratulations ${player.name}, you win!!!`
+        }
+    },
+    endgame: function() {
+        scoreBoard.showScore();
+        gameOver = "true";
+        player = playerOne;
+        message = document.querySelector(".message");
+        message.innerText = "";
     }
+}
+
+programStart();
