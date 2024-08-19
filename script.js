@@ -1,3 +1,17 @@
+function Player(name, marker, score) {
+    this.name = name;
+    this.marker = marker;
+    this.score = score;
+}
+
+const playerOne = new Player("Player 1", "X", 0);
+const playerTwo = new Player("Player 2", "O", 0);
+let player = playerOne;
+let turn = 1
+
+const gameboard = {gameArray: ["0", "0", "0", "0", "0", "0", "0", "0", "0"]}
+
+/*Handles scoreboard and message functions*/
 const scoreBoard = {
     resetScore: function() {
         playerOne.score = 0;
@@ -16,22 +30,7 @@ const scoreBoard = {
     }
 }
 
-function Player(name, marker, score) {
-    this.name = name;
-    this.marker = marker;
-    this.score = score;
-}
-
-const playerOne = new Player("Player 1", "X", 0);
-const playerTwo = new Player("Player 2", "O", 0);
-let player = playerOne;
-let turn = 1
-
-
-const gameboard = {gameArray: ["0", "0", "0", "0", "0", "0", "0", "0", "0"]}
-
-
-
+/*Handles all onclick events*/
 var theParent = document.querySelector("body");
 theParent.addEventListener("click", wasClicked, false);
 
@@ -62,18 +61,7 @@ function wasClicked(e) {
     e.stopPropagation();
 }
 
-
-
-function clearScreen() {
-    boxes = document.querySelectorAll('.box')
-    for (const box of boxes) {
-        box.textContent = "";
-    };
-    playGame.endgame();
-}
-
-
-
+/*Handles the functions of the form to put in your name*/
 const myFormOne = document.getElementById('myFormOne');                    
 myFormOne.addEventListener('submit', function(event) {
     event.preventDefault(); 
@@ -98,13 +86,16 @@ function closeFormTwo() {
 document.getElementById("myFormTwo").style.display = "none";
 }
 
-function programStart() {
-    scoreBoard.resetScore();
-    closeFormOne();
-    closeFormTwo();
-    playGame.startGame();
+
+function clearScreen() {
+    boxes = document.querySelectorAll('.box')
+    for (const box of boxes) {
+        box.textContent = "";
+    };
+    playGame.endgame();
 }
 
+/*Handle all game functions*/
 const playGame = {
     startGame: function() {
     gameOver = "false";
@@ -166,6 +157,13 @@ const playGame = {
         message = document.querySelector(".message");
         message.innerText = "";
     }
+}
+
+function programStart() {
+    scoreBoard.resetScore();
+    closeFormOne();
+    closeFormTwo();
+    playGame.startGame();
 }
 
 programStart();
