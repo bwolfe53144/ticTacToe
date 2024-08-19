@@ -1,167 +1,51 @@
-let playerOneScore = 0;
-let playerTwoScore = 0;
-    
-let turn = 0;
-
-function findWinner() {
-
-    if ((gameArray[0] == 1 && gameArray[1] == 1 && gameArray[2] == 1) 
-        || (gameArray[3] == 1 && gameArray[4] == 1 && gameArray[5] == 1)
-        || (gameArray[6] == 1 && gameArray[7] == 1 && gameArray[8] == 1)
-        || (gameArray[0] == 1 && gameArray[3] == 1 && gameArray[6] == 1)
-        || (gameArray[1] == 1 && gameArray[4] == 1 && gameArray[7] == 1)
-        || (gameArray[2] == 1 && gameArray[5] == 1 && gameArray[8] == 1)
-        || (gameArray[0] == 1 && gameArray[4] == 1 && gameArray[8] == 1)
-        || (gameArray[2] == 1 && gameArray[4] == 1 && gameArray[6] == 1)) {
-        playerOneScore= ++playerOneScore;
-        wonGame = playerOneName;
-        gameDone();
-    } else if ((gameArray[0] == 0 && gameArray[1] == 0 && gameArray[2] == 0) 
-        || (gameArray[3] == 0 && gameArray[4] == 0 && gameArray[5] == 0)
-        || (gameArray[6] == 0 && gameArray[7] == 0 && gameArray[8] == 0)
-        || (gameArray[0] == 0 && gameArray[3] == 0 && gameArray[6] == 0)
-        || (gameArray[1] == 0 && gameArray[4] == 0 && gameArray[7] == 0)
-        || (gameArray[2] == 0 && gameArray[5] == 0 && gameArray[8] == 0)
-        || (gameArray[0] == 0 && gameArray[4] == 0 && gameArray[8] == 0)
-        || (gameArray[2] == 0 && gameArray[4] == 0 && gameArray[6] == 0)) {
-            playerTwoScore = ++playerTwoScore;
-            wonGame = playerTwoName;
-            gameDone();
-        } else if ((gameArray.length == 9) && !gameArray.includes(undefined) ) {
-            wonGame = "tie";
-            gameDone();
-        }       
-}
-
-function endGame() {
-    oneScore.innerText = playerOneScore;
-    twoScore.innerText = playerTwoScore;
-    gameOver = "true";
-    turn = 0;
-    myTurn = playerOneName;
-    myMark = "X";
-    message = document.querySelector(".message");
-    message.innerText = "";
-}
-
-let gameArray = [];
-
-function playGame() {
-    gameArray = [];
-    gameOver = "false";
-    let wonGame = "";
-    whosTurn();
-    /*set up event listener*/
-    let clicked = document.querySelectorAll(".box");
-    for (const click of clicked) {
-        click.addEventListener("click", () => {
-            wasClicked(click);
-        });
-    }
-
-    function wasClicked(e) {
-        /*see if array number was already selected so we can't choose the same spot*/
-        const num = parseInt(e.id);
-        if (gameArray[num-1] !==0 && gameArray[num-1] !==1 && gameOver == "false") {
-        if (turn%2 == 0) {
-            e.textContent = "X";
-            gameArray[num-1] = 1;
-            turn ++;
-            whosTurn();
-            findWinner();
-        } else {
-            e.textContent = "O";
-            gameArray[num-1] = 0;
-            turn ++;
-            whosTurn();
-            findWinner();
-        }
-        }
-        
+const scoreBoard = {
+    resetScore: function() {
+        playerOne.score = 0;
+        playerTwo.score = 0;
+        this.showScore();
+    },
+    showScore: function() {
+        oneName.innerText = playerOne.name;
+        twoName.innerText = playerTwo.name;
+        oneScore.innerText = playerOne.score;
+        twoScore.innerText = playerTwo.score;
+    },
+    showMessage: function() {
+        message = document.querySelector(".message");
+        message.innerText = `It's your turn ${player.name} .... ${player.marker}`; 
     }
 }
 
-/*Function to clear the screen*/
-function clearScreen() {
-    boxes = document.querySelectorAll('.box')
-    for (const box of boxes) {
-        box.textContent = "";
-    };
-    endGame();
+function Player(name, marker, score) {
+    this.name = name;
+    this.marker = marker;
+    this.score = score;
 }
 
-function resetScore() {
-    playerOneScore = 0;
-    playerTwoScore = 0;
-    oneScore.innerText = playerOneScore;
-    twoScore.innerText = playerTwoScore;
-}
+const playerOne = new Player("Player 1", "X", 0);
+const playerTwo = new Player("Player 2", "O", 0);
+let player = playerOne;
+let turn = 1
 
-let playerOneName = "Player One";
-let playerTwoName = "Player Two";
-let myTurn = playerOneName;
 
-let myMark = "X";
+const gameboard = {gameArray: ["0", "0", "0", "0", "0", "0", "0", "0", "0"]}
 
-oneName.innerText = playerOneName;
-twoName.innerText = playerTwoName;
-oneScore.innerText = playerOneScore;
-twoScore.innerText = playerTwoScore;
-
-function whosTurn() {
-    if (turn%2 !== 1) {
-        myTurn = playerOneName;
-        myMark = "X";
-    } else {
-        myTurn = playerTwoName;
-        myMark = "O";
+function boardMoves(box, num){
+    if (gameOver == "false") {
+        box.textContent = `${player.marker}`;
+        gameboard.gameArray[num-1] = `${player.marker}`;
+        turn ++;
+        gameStatus();   
     }
-    message = document.querySelector(".message");
-    message.innerText = `It's your turn ${myTurn} .... ${myMark}`;
-}
-
-function gameDone() {
-    message = document.querySelector(".message");
-    endGame();
-    if (wonGame == "tie") {
-        message.innerText = "It's a tie!"
-    } else {
-        message.innerText = `Congratulations ${wonGame}, you win!!!`
-    }
-}
-
-const myFormOne = document.getElementById('myFormOne');                    
-myFormOne.addEventListener('submit', function(event) {
-    event.preventDefault(); 
-    playerOneName = myFormOne.elements.name.value;
-    oneName.innerText = playerOneName;
-    closeFormOne();
-    whosTurn();
-});
-
-const myformTwo = document.getElementById('myFormTwo');                    
-myformTwo.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
-     playerTwoName = myformTwo.elements.name.value;
-    twoName.innerText = playerTwoName;
-    closeFormTwo();
-    whosTurn();
-});
-
-function closeFormOne() {
-    document.getElementById("myFormOne").style.display = "none";
-}
-
-function closeFormTwo() {
-document.getElementById("myFormTwo").style.display = "none";
 }
 
 var theParent = document.querySelector("body");
-theParent.addEventListener("click", doSomething, false);
+theParent.addEventListener("click", wasClicked, false);
 
-function doSomething(e) {
+function wasClicked(e) {
     if (e.target !== e.currentTarget) {
         var clickedItem = e.target.id;
+        num = parseInt(clickedItem);
         if (clickedItem == "openOne") {
             document.getElementById("myFormOne").style.display = "block";
         } else if (clickedItem == "closeOne") {
@@ -173,15 +57,111 @@ function doSomething(e) {
         } else if (clickedItem == "clear") {
             clearScreen();
         } else if (clickedItem == "reset") {
-            resetScore();
+            scoreBoard.resetScore();
         } else if (clickedItem == "startGame") {
             clearScreen();
-            playGame();
+            startGame();
+        } else if (num > 0 && num < 10 && (gameboard.gameArray[num-1]== "0")) {
+            boardMoves(e.target, num);
+
         }
     }
     e.stopPropagation();
 }
 
-closeFormOne();
-closeFormTwo();
-playGame();
+function gameDone(player) {
+    message = document.querySelector(".message");
+    endGame();
+    if (player == "tie") {
+        message.innerText = "It's a tie!"
+    } else {
+        message.innerText = `Congratulations ${player.name}, you win!!!`
+    }
+}
+
+function clearScreen() {
+    boxes = document.querySelectorAll('.box')
+    for (const box of boxes) {
+        box.textContent = "";
+    };
+    endGame();
+}
+
+function endGame() {
+    scoreBoard.showScore();
+    gameOver = "true";
+    player = playerOne;
+    message = document.querySelector(".message");
+    message.innerText = "";
+}
+
+const myFormOne = document.getElementById('myFormOne');                    
+myFormOne.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    playerOne.name = myFormOne.elements.name.value;
+    scoreBoard.showScore();
+    closeFormOne();
+});
+
+const myformTwo = document.getElementById('myFormTwo');                    
+myformTwo.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+     playerTwo.name = myformTwo.elements.name.value;
+    scoreBoard.showScore();
+    closeFormTwo();
+});
+
+function closeFormOne() {
+    document.getElementById("myFormOne").style.display = "none";
+}
+
+function closeFormTwo() {
+document.getElementById("myFormTwo").style.display = "none";
+}
+
+function programStart() {
+    scoreBoard.resetScore();
+    closeFormOne();
+    closeFormTwo();
+    startGame();
+}
+
+function startGame() {
+    gameOver = "false";
+    turn = 1;
+    player = playerOne;
+    gameboard.gameArray = ["0", "0", "0", "0", "0", "0", "0", "0", "0"];
+    scoreBoard.showScore();
+    scoreBoard.showMessage();
+}
+
+programStart();
+
+    function gameStatus() {
+        if ((gameboard.gameArray[0] == "X" && gameboard.gameArray[1] == "X" && gameboard.gameArray[2] == "X") 
+            || (gameboard.gameArray[3] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[5] == "X")
+            || (gameboard.gameArray[6] == "X" && gameboard.gameArray[7] == "X" && gameboard.gameArray[8] == "X")
+            || (gameboard.gameArray[0] == "X" && gameboard.gameArray[3] == "X" && gameboard.gameArray[6] == "X")
+            || (gameboard.gameArray[1] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[7] == "X")
+            || (gameboard.gameArray[2] == "X" && gameboard.gameArray[5] == "X" && gameboard.gameArray[8] == "X")
+            || (gameboard.gameArray[0] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[8] == "X")
+            || (gameboard.gameArray[2] == "X" && gameboard.gameArray[4] == "X" && gameboard.gameArray[6] == "X")) {
+            playerOne.score= ++playerOne.score;
+            gameDone(playerOne);
+        } else if ((gameboard.gameArray[0] == "O" && gameboard.gameArray[1] == "O" && gameboard.gameArray[2] == "O") 
+            || (gameboard.gameArray[3] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[5] == "O")
+            || (gameboard.gameArray[6] == "O" && gameboard.gameArray[7] == "O" && gameboard.gameArray[8] == "O")
+            || (gameboard.gameArray[0] == "O" && gameboard.gameArray[3] == "O" && gameboard.gameArray[6] == "O")
+            || (gameboard.gameArray[1] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[7] == "O")
+            || (gameboard.gameArray[2] == "O" && gameboard.gameArray[5] == "O" && gameboard.gameArray[8] == "O")
+            || (gameboard.gameArray[0] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[8] == "O")
+            || (gameboard.gameArray[2] == "O" && gameboard.gameArray[4] == "O" && gameboard.gameArray[6] == "O")) {
+                playerTwo.score = ++playerTwo.score;
+                gameDone(playerTwo);
+            } else if (turn == 10) {
+                gameDone("tie");
+            } else {
+                player = player === playerOne ? playerTwo : playerOne; 
+                scoreBoard.showMessage();
+            }              
+    }
